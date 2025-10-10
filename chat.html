@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3 Kilit Tv Sohbet Odaları</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>3 Kilit Tv Sohbet Odaları</h1>
+    <p class="slogan">Gördüm, Duydum, Biliyorum</p>
+  </header>
+
+  <main>
+    <h2>Bir Oda Seç:</h2>
+    <div id="rooms">
+      <button onclick="joinRoom('genel')">Genel</button>
+      <button onclick="joinRoom('bilim')">Bilim</button>
+      <button onclick="joinRoom('siyaset')">Siyaset</button>
+      <button onclick="joinRoom('astroloji')">Astroloji</button>
+      <button onclick="joinRoom('paranormal')">Paranormal Olaylar</button>
+      <button onclick="joinRoom('magazin')">Magazin</button>
+      <button onclick="joinRoom('spor')">Spor</button>
+      <button onclick="joinRoom('müzik')">Müzik</button>
+    </div>
+
+    <div id="chatArea" style="display:none;">
+      <h2 id="roomTitle"></h2>
+      <div id="messages" style="background:#1e293b; padding:10px; border-radius:10px; height:250px; overflow:auto;"></div>
+      <input type="text" id="msgInput" placeholder="Mesaj yaz..." style="width:70%; padding:10px;">
+      <button onclick="sendMessage()">Gönder</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 3 Kilit Tv | Gördüm Duydum Biliyorum</p>
+  </footer>
+
+  <script>
+    let currentRoom = "";
+    const messages = {};
+
+    function joinRoom(room) {
+      currentRoom = room;
+      document.getElementById("roomTitle").innerText = room.toUpperCase() + " ODASI";
+      document.getElementById("rooms").style.display = "none";
+      document.getElementById("chatArea").style.display = "block";
+      if (!messages[room]) messages[room] = [];
+      showMessages();
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("msgInput");
+      const text = input.value.trim();
+      if (text === "") return;
+      if (/([!@#$%^&*()_+={}\[\]:;"'<>,.?/~`])/g.test(text)) {
+        alert("Lütfen noktalama ve argo kullanmayın.");
+        return;
+      }
+      messages[currentRoom].push(text);
+      input.value = "";
+      showMessages();
+    }
+
+    function showMessages() {
+      const msgDiv = document.getElementById("messages");
+      msgDiv.innerHTML = messages[currentRoom].map(m => `<p>${m}</p>`).join("");
+    }
+  </script>
+</body>
+</html>
