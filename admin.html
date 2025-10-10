@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3 Kilit Tv | Admin Paneli</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background:#0f172a; color:white; font-family:Arial; text-align:center; }
+    input, select, textarea { padding:10px; margin:5px; border-radius:10px; border:none; }
+    button { padding:10px 20px; border:none; border-radius:10px; background:#3b82f6; color:white; cursor:pointer; }
+    button:hover { background:#2563eb; }
+    .container { max-width:600px; margin:auto; margin-top:50px; background:#1e293b; padding:30px; border-radius:15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 3 Kilit Tv Admin Paneli</h1>
+    <p>Sisteme giriş yapın</p>
+
+    <input type="text" id="username" placeholder="Kullanıcı adı"><br>
+    <input type="password" id="password" placeholder="Şifre"><br>
+    <button onclick="login()">Giriş Yap</button>
+
+    <div id="panel" style="display:none;">
+      <h2 id="roleTitle"></h2>
+      <div id="actions"></div>
+    </div>
+  </div>
+
+  <script>
+    const admins = {
+      "cemre": { pass: "12345", role: "Ana Admin" },
+      "admin2": { pass: "23456", role: "Yardımcı Admin" },
+      "admin3": { pass: "34567", role: "Editör" }
+    };
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (admins[user] && admins[user].pass === pass) {
+        document.querySelector("input").style.display = "none";
+        document.querySelectorAll("input")[1].style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+        document.getElementById("roleTitle").innerText = `Hoş geldin ${user} (${admins[user].role})`;
+        showActions(admins[user].role);
+      } else {
+        alert("Hatalı giriş!");
+      }
+    }
+
+    function showActions(role) {
+      let html = "";
+      if (role === "Ana Admin") {
+        html += "<p>✔️ Tüm site yönetimi senin elinde.</p>";
+        html += "<button>Haber Ekle</button><button>Blog Ekle</button><button>Sohbeti Denetle</button><button>Yeni Admin Ekle</button>";
+      } else if (role === "Yardımcı Admin") {
+        html += "<p>📰 Haber, Blog ekleyebilir ve Sohbeti Denetleyebilirsin.</p>";
+        html += "<button>Haber Ekle</button><button>Blog Ekle</button><button>Sohbeti Denetle</button>";
+      } else if (role === "Editör") {
+        html += "<p>📝 Sadece Haber ve Blog ekleyebilirsin.</p>";
+        html += "<button>Haber Ekle</button><button>Blog Ekle</button>";
+      }
+      document.getElementById("actions").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
