@@ -66,6 +66,17 @@
       }
       document.getElementById("actions").innerHTML = html;
     }
-  </script>
+// Haber Ekle butonuna tıklanınca çağrılacak fonksiyon
+function addNews() {
+  const title = prompt("Haber başlığını gir:");
+  const content = prompt("Haber içeriğini gir:");
+  if (title && content) {
+    const news = { title, content, date: new Date().toLocaleString() };
+    let stored = JSON.parse(localStorage.getItem("news") || "[]");
+    stored.push(news);
+    localStorage.setItem("news", JSON.stringify(stored));
+    alert("Haber başarıyla eklendi! 🎉");
+  }
+</script>
 </body>
 </html>
