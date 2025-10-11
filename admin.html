@@ -29,74 +29,76 @@
   </div>
 
   <script>
+    // --- Admin hesapları ---
     const admins = {
-      "cemre": { pass: "12345", role: "Ana Admin" },
+      "durumsal": { pass: "duru44kilit3tv17", role: "Süper Admin" },
       "admin2": { pass: "123tvbekilit", role: "Yardımcı Admin" },
-      "admin3": { pass: "321tvbekilit", role: "Editör" },
-      "durumsal": { pass: "duru44kilit3tv17", role: "Süper Admin" }
+      "admin3": { pass: "321tvbekilit", role: "Editör" }
     };
 
+    // --- Giriş fonksiyonu ---
     function login() {
       const user = document.getElementById("username").value;
       const pass = document.getElementById("password").value;
 
       if (admins[user] && admins[user].pass === pass) {
-        document.querySelector("input").style.display = "none";
-        document.querySelectorAll("input")[1].style.display = "none";
+        document.querySelectorAll("input").forEach(i => i.style.display = "none");
         document.querySelector("button").style.display = "none";
         document.getElementById("panel").style.display = "block";
         document.getElementById("roleTitle").innerText = `Hoş geldin ${user} (${admins[user].role})`;
         showActions(admins[user].role);
       } else {
-        alert("Hatalı giriş!");
+        alert("❌ Hatalı kullanıcı adı veya şifre!");
       }
     }
 
+    // --- Rol bazlı işlem butonları ---
     function showActions(role) {
       let html = "";
-
-      // Kurucu bilgisi
-      if(role === "Süper Admin") {
-        html += "<p>👑 Site Kurucusu ve Sahibi: Cemre Duru Özbey</p>";
-      }
-
-      if (role === "Ana Admin" || role === "Süper Admin") {
-        html += "<p>✔️ Tüm site yönetimi senin elinde.</p>";
-        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button><button>Sohbeti Denetle</button><button>Yeni Admin Ekle</button>";
+      if (role === "Süper Admin") {
+        html += "<p>✔️ Site kurucusu: Durumsal (Tüm yetkiler açık)</p>";
+        html += `<button onclick="addNews()">Haber Ekle</button>
+                 <button onclick="addBlog()">Blog Ekle</button>
+                 <button onclick="alert('Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>
+                 <button onclick="alert('Yeni admin ekleme yakında aktif!')">Yeni Admin Ekle</button>`;
       } else if (role === "Yardımcı Admin") {
-        html += "<p>📰 Haber, Blog ekleyebilir ve Sohbeti Denetleyebilirsin.</p>";
-        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button><button>Sohbeti Denetle</button>";
+        html += "<p>📰 Haber ve Blog ekleyebilir, Sohbeti denetleyebilirsin.</p>";
+        html += `<button onclick="addNews()">Haber Ekle</button>
+                 <button onclick="addBlog()">Blog Ekle</button>
+                 <button onclick="alert('Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>`;
       } else if (role === "Editör") {
         html += "<p>📝 Sadece Haber ve Blog ekleyebilirsin.</p>";
-        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button>";
+        html += `<button onclick="addNews()">Haber Ekle</button>
+                 <button onclick="addBlog()">Blog Ekle</button>`;
       }
-
       document.getElementById("actions").innerHTML = html;
     }
 
-    // Haber ekleme fonksiyonu
+    // --- Haber ekleme fonksiyonu ---
     function addNews() {
-      const title = prompt("Haber başlığını gir:");
-      const content = prompt("Haber içeriğini gir:");
+      const title = prompt("📰 Haber başlığını gir:");
+      const content = prompt("Haber içeriğini yaz:");
       if (title && content) {
         const news = { title, content, date: new Date().toLocaleString() };
         let stored = JSON.parse(localStorage.getItem("news") || "[]");
         stored.push(news);
         localStorage.setItem("news", JSON.stringify(stored));
-        alert("Haber başarıyla eklendi! 🎉");
+        alert("✅ Haber başarıyla eklendi!");
+        window.location.href = "haberler.html";
       }
     }
 
-    // Blog ekleme fonksiyonu
+    // --- Blog ekleme fonksiyonu ---
     function addBlog() {
-      const title = prompt("Blog başlığını gir:");
-      const content = prompt("Blog içeriğini gir:");
+      const title = prompt("✍️ Blog başlığını gir:");
+      const content = prompt("Blog içeriğini yaz:");
       if (title && content) {
-        const blog = { title, content, date: new Date().toLocaleString() };
+        const blogs = { title, content, date: new Date().toLocaleString() };
         let stored = JSON.parse(localStorage.getItem("blogs") || "[]");
-        stored.push(blog);
+        stored.push(blogs);
         localStorage.setItem("blogs", JSON.stringify(stored));
-        alert("Blog başarıyla eklendi! 🎉");
+        alert("✅ Blog başarıyla eklendi!");
+        window.location.href = "blog.html";
       }
     }
   </script>
