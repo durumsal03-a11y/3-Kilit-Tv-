@@ -31,8 +31,8 @@
   <script>
     const admins = {
       "cemre": { pass: "12345", role: "Ana Admin" },
-      "admin2": { pass: "23456", role: "Yardımcı Admin" },
-      "admin3": { pass: "34567", role: "Editör" },
+      "admin2": { pass: "123tvbekilit", role: "Yardımcı Admin" },
+      "admin3": { pass: "321tvbekilit", role: "Editör" },
       "durumsal": { pass: "duru44kilit3tv17", role: "Süper Admin" }
     };
 
@@ -54,29 +54,51 @@
 
     function showActions(role) {
       let html = "";
-      if (role === "Ana Admin") {
+
+      // Kurucu bilgisi
+      if(role === "Süper Admin") {
+        html += "<p>👑 Site Kurucusu ve Sahibi: Cemre Duru Özbey</p>";
+      }
+
+      if (role === "Ana Admin" || role === "Süper Admin") {
         html += "<p>✔️ Tüm site yönetimi senin elinde.</p>";
-        html += "<button>Haber Ekle</button><button>Blog Ekle</button><button>Sohbeti Denetle</button><button>Yeni Admin Ekle</button>";
+        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button><button>Sohbeti Denetle</button><button>Yeni Admin Ekle</button>";
       } else if (role === "Yardımcı Admin") {
         html += "<p>📰 Haber, Blog ekleyebilir ve Sohbeti Denetleyebilirsin.</p>";
-        html += "<button>Haber Ekle</button><button>Blog Ekle</button><button>Sohbeti Denetle</button>";
+        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button><button>Sohbeti Denetle</button>";
       } else if (role === "Editör") {
         html += "<p>📝 Sadece Haber ve Blog ekleyebilirsin.</p>";
-        html += "<button>Haber Ekle</button><button>Blog Ekle</button>";
+        html += "<button onclick='addNews()'>Haber Ekle</button><button onclick='addBlog()'>Blog Ekle</button>";
       }
+
       document.getElementById("actions").innerHTML = html;
     }
-// Haber Ekle butonuna tıklanınca çağrılacak fonksiyon
-function addNews() {
-  const title = prompt("Haber başlığını gir:");
-  const content = prompt("Haber içeriğini gir:");
-  if (title && content) {
-    const news = { title, content, date: new Date().toLocaleString() };
-    let stored = JSON.parse(localStorage.getItem("news") || "[]");
-    stored.push(news);
-    localStorage.setItem("news", JSON.stringify(stored));
-    alert("Haber başarıyla eklendi! 🎉");
-  }
-</script>
+
+    // Haber ekleme fonksiyonu
+    function addNews() {
+      const title = prompt("Haber başlığını gir:");
+      const content = prompt("Haber içeriğini gir:");
+      if (title && content) {
+        const news = { title, content, date: new Date().toLocaleString() };
+        let stored = JSON.parse(localStorage.getItem("news") || "[]");
+        stored.push(news);
+        localStorage.setItem("news", JSON.stringify(stored));
+        alert("Haber başarıyla eklendi! 🎉");
+      }
+    }
+
+    // Blog ekleme fonksiyonu
+    function addBlog() {
+      const title = prompt("Blog başlığını gir:");
+      const content = prompt("Blog içeriğini gir:");
+      if (title && content) {
+        const blog = { title, content, date: new Date().toLocaleString() };
+        let stored = JSON.parse(localStorage.getItem("blogs") || "[]");
+        stored.push(blog);
+        localStorage.setItem("blogs", JSON.stringify(stored));
+        alert("Blog başarıyla eklendi! 🎉");
+      }
+    }
+  </script>
 </body>
 </html>
