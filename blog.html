@@ -6,8 +6,10 @@
   <title>3 Kilit Tv | Blog</title>
   <style>
     body { background:#0f172a; color:white; font-family:Arial; text-align:center; margin:0; padding:20px; }
-    h1 { color:#3b82f6; margin-bottom:20px; }
-    .blog-container { max-width:800px; margin:auto; }
+    header { display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; }
+    header img { width:40px; height:40px; border-radius:50%; }
+    header h1 { color:#3b82f6; margin:0; font-size:28px; }
+    .blog-container { max-width:800px; margin:auto; margin-top:20px; }
     .blog-item { background:#1e293b; border-radius:12px; padding:20px; margin:15px 0; text-align:left; }
     .blog-item h2 { color:#60a5fa; margin-bottom:10px; }
     .buttons { margin-top:30px; }
@@ -19,7 +21,11 @@
   </style>
 </head>
 <body>
-  <h1>✍️ 3 Kilit Tv Blog</h1>
+  <header onclick="window.location.href='index.html'">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Lock_icon_blue.png" alt="logo">
+    <h1>3 Kilit Tv Blog</h1>
+  </header>
+
   <div class="blog-container" id="blogList"></div>
 
   <div class="buttons">
