@@ -3,70 +3,201 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3 Kilit Tv Sohbet Odaları</title>
-  <link rel="stylesheet" href="style.css">
+  <title>3 Kilit Tv | Sohbet Odaları</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: white;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      color: #60a5fa;
+      font-weight: bold;
+      border-bottom: 2px solid #3b82f6;
+      cursor: pointer;
+    }
+
+    #chatBox {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      word-wrap: break-word;
+      line-height: 1.4;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #3b82f6;
+    }
+
+    .other {
+      align-self: flex-start;
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    footer {
+      display: flex;
+      padding: 10px;
+      background: #1e293b;
+      border-top: 2px solid #3b82f6;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-right: 10px;
+      background: #0f172a;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      background: #3b82f6;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .username-box, .room-select {
+      background: #1e293b;
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .username-box input {
+      width: 60%;
+      margin-right: 5px;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: #0f172a;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+  </style>
 </head>
 <body>
-  <header>
-    <h1>3 Kilit Tv Sohbet Odaları</h1>
-    <p class="slogan">Gördüm, Duydum, Biliyorum</p>
-  </header>
 
-  <main>
-    <h2>Bir Oda Seç:</h2>
-    <div id="rooms">
-      <button onclick="joinRoom('genel')">Genel</button>
-      <button onclick="joinRoom('bilim')">Bilim</button>
-      <button onclick="joinRoom('siyaset')">Siyaset</button>
-      <button onclick="joinRoom('astroloji')">Astroloji</button>
-      <button onclick="joinRoom('paranormal')">Paranormal Olaylar</button>
-      <button onclick="joinRoom('magazin')">Magazin</button>
-      <button onclick="joinRoom('spor')">Spor</button>
-      <button onclick="joinRoom('müzik')">Müzik</button>
-    </div>
+  <header onclick="window.location.href='index.html'">🔒 3 Kilit Tv | Sohbet Odaları</header>
 
-    <div id="chatArea" style="display:none;">
-      <h2 id="roomTitle"></h2>
-      <div id="messages" style="background:#1e293b; padding:10px; border-radius:10px; height:250px; overflow:auto;"></div>
-      <input type="text" id="msgInput" placeholder="Mesaj yaz..." style="width:70%; padding:10px;">
-      <button onclick="sendMessage()">Gönder</button>
-    </div>
-  </main>
+  <div class="username-box" id="usernameBox">
+    <input type="text" id="username" placeholder="Kullanıcı adınızı girin...">
+    <button onclick="setUsername()">Devam Et</button>
+  </div>
 
-  <footer>
-    <p>© 2025 3 Kilit Tv | Gördüm Duydum Biliyorum</p>
+  <div class="room-select" id="roomSelect" style="display:none;">
+    <label>Oda seçin:</label>
+    <select id="room" onchange="changeRoom()">
+      <option value="genel">🌐 Genel Sohbet</option>
+      <option value="bilim">🔬 Bilim Odası</option>
+      <option value="astroloji">🌌 Astroloji Odası</option>
+      <option value="paranormal">👻 Paranormal Olaylar</option>
+      <option value="siyaset">🏛️ Siyaset</option>
+      <option value="muzik">🎵 Müzik</option>
+      <option value="magazin">📰 Magazin</option>
+      <option value="spor">⚽ Spor</option>
+    </select>
+  </div>
+
+  <div id="chatBox"></div>
+
+  <footer id="chatFooter" style="display:none;">
+    <input type="text" id="messageInput" placeholder="Mesajınızı yazın...">
+    <button onclick="sendMessage()">Gönder</button>
   </footer>
 
   <script>
-    let currentRoom = "";
-    const messages = {};
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementById("messageInput");
+    const chatFooter = document.getElementById("chatFooter");
+    const usernameBox = document.getElementById("usernameBox");
+    const roomSelect = document.getElementById("roomSelect");
+    let username = "";
+    let currentRoom = "genel";
 
-    function joinRoom(room) {
-      currentRoom = room;
-      document.getElementById("roomTitle").innerText = room.toUpperCase() + " ODASI";
-      document.getElementById("rooms").style.display = "none";
-      document.getElementById("chatArea").style.display = "block";
-      if (!messages[room]) messages[room] = [];
-      showMessages();
+    function setUsername() {
+      const input = document.getElementById("username").value.trim();
+      if (input) {
+        username = input;
+        usernameBox.style.display = "none";
+        roomSelect.style.display = "block";
+        chatFooter.style.display = "flex";
+        loadMessages();
+      }
+    }
+
+    function changeRoom() {
+      currentRoom = document.getElementById("room").value;
+      loadMessages();
+    }
+
+    function loadMessages() {
+      const stored = JSON.parse(localStorage.getItem("messages_" + currentRoom) || "[]");
+      chatBox.innerHTML = "";
+      stored.forEach(msg => addMessage(msg.text, msg.user));
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function addMessage(text, user) {
+      const div = document.createElement("div");
+      div.classList.add("message");
+      div.classList.add(user === username ? "user" : "other");
+      div.textContent = `${user}: ${text}`;
+      chatBox.appendChild(div);
     }
 
     function sendMessage() {
-      const input = document.getElementById("msgInput");
-      const text = input.value.trim();
-      if (text === "") return;
-      if (/([!@#$%^&*()_+={}\[\]:;"'<>,.?/~`])/g.test(text)) {
-        alert("Lütfen noktalama ve argo kullanmayın.");
-        return;
-      }
-      messages[currentRoom].push(text);
-      input.value = "";
-      showMessages();
+      const text = messageInput.value.trim();
+      if (!text) return;
+      const message = { text, user: username };
+      const stored = JSON.parse(localStorage.getItem("messages_" + currentRoom) || "[]");
+      stored.push(message);
+      localStorage.setItem("messages_" + currentRoom, JSON.stringify(stored));
+      addMessage(text, username);
+      messageInput.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function showMessages() {
-      const msgDiv = document.getElementById("messages");
-      msgDiv.innerHTML = messages[currentRoom].map(m => `<p>${m}</p>`).join("");
-    }
+    messageInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
   </script>
+
 </body>
 </html>
