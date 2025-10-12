@@ -3,26 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3 Kilit Tv | Haberler</title>
+  <title>3 Kilit TV | Haberler</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #f1f1f1;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #333;
+    }
+    header h1 {
+      color: #fff;
+      font-size: 24px;
+    }
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 10px;
+    }
+    .news-item {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.05);
+    }
+    .news-item h2 {
+      color: #00bcd4;
+      margin-bottom: 10px;
+    }
+    .news-item p {
+      color: #ddd;
+      line-height: 1.6;
+    }
+    .date {
+      font-size: 12px;
+      color: #999;
+      margin-top: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #777;
+      border-top: 1px solid #333;
+    }
+  </style>
 </head>
-<body style="background:#0f172a; color:white; font-family:Arial; text-align:center;">
-  <h1>📰 3 Kilit Tv Haberler</h1>
-  <div id="newsList"></div>
+<body>
+  <header>
+    <h1>📰 3 Kilit TV Haberler</h1>
+    <p>Gördüm, duydum, biliyorum</p>
+  </header>
+
+  <main id="newsContainer">
+    <p style="text-align:center; color:#888;">Yükleniyor...</p>
+  </main>
+
+  <footer>
+    <p>© 2025 3 Kilit TV | Tüm hakları saklıdır.</p>
+  </footer>
 
   <script>
+    const container = document.getElementById("newsContainer");
     const news = JSON.parse(localStorage.getItem("news") || "[]");
-    const list = document.getElementById("newsList");
 
     if (news.length === 0) {
-      list.innerHTML = "<p>Henüz haber eklenmemiş.</p>";
+      container.innerHTML = "<p style='text-align:center;color:#666;'>Henüz haber eklenmemiş.</p>";
     } else {
-      news.forEach(n => {
-        const div = document.createElement("div");
-        div.style.margin = "20px";
-        div.innerHTML = `<h2>${n.title}</h2><p>${n.content}</p><small>${n.date}</small><hr>`;
-        list.appendChild(div);
-      });
+      container.innerHTML = news.reverse().map(n => `
+        <div class="news-item">
+          <h2>${n.title}</h2>
+          <p>${n.content}</p>
+          <div class="date">${n.date}</div>
+        </div>
+      `).join("");
     }
   </script>
 </body>
