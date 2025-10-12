@@ -8,7 +8,7 @@
   <style>
     body { background:#0f172a; color:white; font-family:Arial; text-align:center; }
     input, select, textarea { padding:10px; margin:5px; border-radius:10px; border:none; }
-    button { padding:10px 20px; border:none; border-radius:10px; background:#3b82f6; color:white; cursor:pointer; }
+    button { padding:10px 20px; border:none; border-radius:10px; background:#3b82f6; color:white; cursor:pointer; margin:5px; }
     button:hover { background:#2563eb; }
     .container { max-width:600px; margin:auto; margin-top:50px; background:#1e293b; padding:30px; border-radius:15px; }
   </style>
@@ -36,20 +36,34 @@
       "admin3": { pass: "321tvbekilit", role: "Editör" }
     };
 
+    // --- Sayfa açıldığında oturum kontrolü ---
+    window.onload = function() {
+      const savedUser = localStorage.getItem("loggedUser");
+      if (savedUser && admins[savedUser]) {
+        showPanel(savedUser);
+      }
+    };
+
     // --- Giriş fonksiyonu ---
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
 
       if (admins[user] && admins[user].pass === pass) {
-        document.querySelectorAll("input").forEach(i => i.style.display = "none");
-        document.querySelector("button").style.display = "none";
-        document.getElementById("panel").style.display = "block";
-        document.getElementById("roleTitle").innerText = `Hoş geldin ${user} (${admins[user].role})`;
-        showActions(admins[user].role);
+        localStorage.setItem("loggedUser", user);
+        showPanel(user);
       } else {
         alert("❌ Hatalı kullanıcı adı veya şifre!");
       }
+    }
+
+    // --- Paneli göster ---
+    function showPanel(user) {
+      document.querySelectorAll("input").forEach(i => i.style.display = "none");
+      document.querySelector("button").style.display = "none";
+      document.getElementById("panel").style.display = "block";
+      document.getElementById("roleTitle").innerText = `Hoş geldin ${user} (${admins[user].role})`;
+      showActions(admins[user].role);
     }
 
     // --- Rol bazlı işlem butonları ---
@@ -57,24 +71,25 @@
       let html = "";
       if (role === "Süper Admin") {
         html += "<p>✔️ Site kurucusu: Durumsal (Tüm yetkiler açık)</p>";
-        html += `<button onclick="addNews()">Haber Ekle</button>
-                 <button onclick="addBlog()">Blog Ekle</button>
-                 <button onclick="alert('Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>
-                 <button onclick="alert('Yeni admin ekleme yakında aktif!')">Yeni Admin Ekle</button>`;
+        html += `<button onclick="addNews()">📰 Haber Ekle</button>
+                 <button onclick="addBlog()">✍️ Blog Ekle</button>
+                 <button onclick="alert('💬 Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>
+                 <button onclick="alert('👥 Yeni admin ekleme yakında aktif!')">Yeni Admin Ekle</button>`;
       } else if (role === "Yardımcı Admin") {
         html += "<p>📰 Haber ve Blog ekleyebilir, Sohbeti denetleyebilirsin.</p>";
-        html += `<button onclick="addNews()">Haber Ekle</button>
-                 <button onclick="addBlog()">Blog Ekle</button>
-                 <button onclick="alert('Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>`;
+        html += `<button onclick="addNews()">📰 Haber Ekle</button>
+                 <button onclick="addBlog()">✍️ Blog Ekle</button>
+                 <button onclick="alert('💬 Sohbet denetimi yakında aktif!')">Sohbeti Denetle</button>`;
       } else if (role === "Editör") {
         html += "<p>📝 Sadece Haber ve Blog ekleyebilirsin.</p>";
-        html += `<button onclick="addNews()">Haber Ekle</button>
-                 <button onclick="addBlog()">Blog Ekle</button>`;
+        html += `<button onclick="addNews()">📰 Haber Ekle</button>
+                 <button onclick="addBlog()">✍️ Blog Ekle</button>`;
       }
+      html += `<br><button onclick="logout()">🚪 Çıkış Yap</button>`;
       document.getElementById("actions").innerHTML = html;
     }
 
-    // --- Haber ekleme fonksiyonu ---
+    // --- Haber ekleme ---
     function addNews() {
       const title = prompt("📰 Haber başlığını gir:");
       const content = prompt("Haber içeriğini yaz:");
@@ -88,7 +103,7 @@
       }
     }
 
-    // --- Blog ekleme fonksiyonu ---
+    // --- Blog ekleme ---
     function addBlog() {
       const title = prompt("✍️ Blog başlığını gir:");
       const content = prompt("Blog içeriğini yaz:");
@@ -100,6 +115,12 @@
         alert("✅ Blog başarıyla eklendi!");
         window.location.href = "blog.html";
       }
+    }
+
+    // --- Çıkış ---
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      location.reload();
     }
   </script>
 </body>
